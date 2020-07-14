@@ -1,0 +1,27 @@
+{
+  "name": "shopping-scan",
+  "version": "1.0.0",
+  "description": "Escaner de compras",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Draw507/shopping-scan.git"
+  },
+  "author": "David Robinson",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Draw507/shopping-scan/issues"
+  },
+  "homepage": "https://github.com/Draw507/shopping-scan#readme",
+  "devDependencies": {
+    "cz-conventional-changelog": "^3.2.0"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  }
+}
