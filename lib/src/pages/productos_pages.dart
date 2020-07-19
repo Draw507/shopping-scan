@@ -1,5 +1,6 @@
 import 'package:barcode/src/bloc/scans_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class ProductosPage extends StatelessWidget {
   final scansBloc = new ScansBloc();
@@ -20,24 +21,34 @@ class ProductosPage extends StatelessWidget {
         return ListView.builder(
           itemCount: scans.length,
           itemBuilder: (context, i) => Dismissible(
-            key: UniqueKey(),
-            background: Container(
-              color: Colors.red,
-            ),
-            onDismissed: (direction) => scansBloc.borrarScan(scans[i].id),
-            child: ListTile(
-              leading: Icon(
-                Icons.cloud_queue,
-                color: Theme.of(context).primaryColor,
+              key: UniqueKey(),
+              background: Container(
+                color: Colors.red,
               ),
-              title: Text(scans[i].valor),
-              subtitle: Text('ID: ${scans[i].id}'),
-              trailing: Icon(
-                Icons.keyboard_arrow_right,
-                color: Colors.grey,
-              ),
-            ),
-          ),
+              onDismissed: (direction) => scansBloc.borrarScan(scans[i].id),
+              child: Card(
+                child: Column(
+                  children: <Widget>[
+                    ListTile(
+                      leading: Icon(
+                        Icons.shopping_basket,
+                        color: Theme.of(context).primaryColor,
+                      ),
+                      title: Text(
+                          '${scans[i].producto} - ${NumberFormat.simpleCurrency().format(scans[i].precio)}'),
+                      subtitle: Text(
+                          '${scans[i].establecimiento} \n${scans[i].valor}'),
+                      trailing: Icon(
+                        Icons.keyboard_arrow_right,
+                        color: Colors.grey,
+                      ),
+                      isThreeLine: true,
+                      onTap: () => Navigator.pushNamed(context, 'producto',
+                          arguments: scans[i]),
+                    ),
+                  ],
+                ),
+              )),
         );
       },
     );

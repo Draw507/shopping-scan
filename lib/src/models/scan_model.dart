@@ -1,31 +1,49 @@
 class ScanModel {
   int id;
+  String uuid;
   String tipo;
   String valor;
   String formato;
   String formatoNota;
+  String establecimiento;
+  String producto;
+  double precio;
+  String estado;
 
-  ScanModel({
-    this.id,
-    this.tipo,
-    this.valor,
-    this.formato,
-    this.formatoNota,
-  });
+  ScanModel(
+      {this.id,
+      this.uuid,
+      this.tipo,
+      this.valor,
+      this.formato,
+      this.formatoNota,
+      this.establecimiento,
+      this.producto,
+      this.precio,
+      this.estado});
 
   factory ScanModel.fromJson(Map<String, dynamic> json) => ScanModel(
-        id: json["id"],
-        tipo: json["tipo"],
-        valor: json["valor"],
-        formato: json["formato"],
-        formatoNota: json["formatoNota"],
-      );
+      id: json["id"],
+      uuid: json["uuid"],
+      tipo: json["tipo"],
+      valor: json["valor"],
+      formato: json["formato"],
+      formatoNota: json["formatoNota"],
+      establecimiento: json["establecimiento"],
+      producto: json["producto"],
+      precio: json["precio"],
+      estado: json["estado"]);
 
   Map<String, dynamic> toJson() => {
         "id": id,
+        "uuid": uuid,
         "tipo": tipo,
         "valor": valor,
         "formato": formato,
         "formatoNota": formatoNota,
+        "establecimiento": establecimiento,
+        "producto": producto,
+        "precio": precio,
+        "estado": estado
       };
 }

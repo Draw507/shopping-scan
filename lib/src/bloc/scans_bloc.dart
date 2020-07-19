@@ -30,6 +30,11 @@ class ScansBloc {
     obtenerScans();
   }
 
+  updateScan(ScanModel scan) async {
+    await DBProvider.db.updateScan(scan);
+    obtenerScans();
+  }
+
   borrarScan(int id) async {
     await DBProvider.db.deleteScan(id);
     obtenerScans();

@@ -29,21 +29,17 @@ class DBProvider {
         onCreate: (Database db, int version) async {
       await db.execute('CREATE TABLE Scans('
           ' id INTEGER PRIMARY KEY,'
+          ' uuid TEXT,'
           ' tipo TEXT,'
           ' valor TEXT,'
           ' formato TEXT,'
-          ' formatoNota TEXT'
+          ' formatoNota TEXT,'
+          ' establecimiento TEXT,'
+          ' producto TEXT,'
+          ' precio REAL,'
+          ' estado TEXT'
           ')');
     });
-  }
-
-  nuevoScanRaw(ScanModel nuevoScan) async {
-    final db = await database;
-    final res = await db.rawInsert(
-        "INSERT Into Scans (id, tipo, valor, formato, formatoNota) "
-        "VALUES (${nuevoScan.id}, '${nuevoScan.tipo}', '${nuevoScan.valor}', '${nuevoScan.formato}', '${nuevoScan.formatoNota}')");
-
-    return res;
   }
 
   Future<int> nuevoScan(ScanModel nuevoScan) async {
@@ -57,6 +53,14 @@ class DBProvider {
   Future<ScanModel> getScanId(int id) async {
     final db = await database;
     final res = await db.query('Scans', where: 'id = ?', whereArgs: [id]);
+
+    return res.isNotEmpty ? ScanModel.fromJson(res.first) : null;
+  }
+
+  Future<ScanModel> getUltimoScanIncompleto() async {
+    final db = await database;
+    final res = await db.rawQuery(
+        "SELECT * FROM Scans WHERE id = (SELECT MAX(id) FROM Scans WHERE estado = 'INCOMPLETO')");
 
     return res.isNotEmpty ? ScanModel.fromJson(res.first) : null;
   }
