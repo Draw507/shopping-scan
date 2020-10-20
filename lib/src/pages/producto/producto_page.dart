@@ -1,6 +1,7 @@
-import 'package:barcode/src/bloc/scans_bloc.dart';
-import 'package:barcode/src/providers/db_provider.dart';
+import 'package:barcode/src/blocs/productos/productos_bloc.dart';
+import 'package:barcode/src/models/producto_model.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProductoPage extends StatefulWidget {
   ProductoPage({Key key}) : super(key: key);
@@ -12,16 +13,16 @@ class ProductoPage extends StatefulWidget {
 class _ProductoPageState extends State<ProductoPage> {
   final formKey = GlobalKey<FormState>();
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  final scansBloc = new ScansBloc();
 
-  ScanModel scanModel = new ScanModel();
+  ProductoModel productoModel = new ProductoModel();
   bool _guardando = false;
 
   @override
   Widget build(BuildContext context) {
-    final ScanModel scanData = ModalRoute.of(context).settings.arguments;
-    if (scanData != null) {
-      scanModel = scanData;
+    final ProductoModel productoArgsData =
+        ModalRoute.of(context).settings.arguments;
+    if (productoArgsData != null) {
+      productoModel = productoArgsData;
     }
 
     return Scaffold(
@@ -50,10 +51,10 @@ class _ProductoPageState extends State<ProductoPage> {
 
   Widget _crearCodigo() {
     return TextFormField(
-      initialValue: scanModel.valor,
+      initialValue: productoModel.valor,
       textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(labelText: 'Código'),
-      onSaved: (value) => scanModel.valor = value,
+      onSaved: (value) => productoModel.valor = value,
       // validator: (value) {
       //   if (value.length < 3) {
       //     return 'Ingrese el nombre del producto';
@@ -66,29 +67,30 @@ class _ProductoPageState extends State<ProductoPage> {
 
   Widget _crearEstablecimiento() {
     return TextFormField(
-      initialValue: scanModel.establecimiento,
+      initialValue: productoModel.establecimiento,
       textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(labelText: 'Establecimiento'),
-      onSaved: (value) => scanModel.establecimiento = value,
+      onSaved: (value) => productoModel.establecimiento = value,
     );
   }
 
   Widget _crearProducto() {
     return TextFormField(
-      initialValue: scanModel.producto,
+      initialValue: productoModel.producto,
       textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(labelText: 'Producto'),
-      onSaved: (value) => scanModel.producto = value,
+      onSaved: (value) => productoModel.producto = value,
     );
   }
 
   Widget _crearPrecio() {
     return TextFormField(
-      initialValue: scanModel.precio == null ? '' : scanModel.precio.toString(),
+      initialValue:
+          productoModel.precio == null ? '' : productoModel.precio.toString(),
       textCapitalization: TextCapitalization.sentences,
       decoration: InputDecoration(labelText: 'Precio'),
       keyboardType: TextInputType.number,
-      onSaved: (value) => scanModel.precio = double.parse(value),
+      onSaved: (value) => productoModel.precio = double.parse(value),
     );
   }
 
@@ -112,10 +114,12 @@ class _ProductoPageState extends State<ProductoPage> {
       _guardando = true;
     });
 
-    if (scanModel.id == null) {
-      scansBloc.agregarScan(scanModel);
+    if (productoModel.id == null) {
+      //scansBloc.agregarScan(productoModel);
+      BlocProvider.of<ProductosBloc>(context)
+          .add(Add(nuevoProducto: productoModel));
     } else {
-      scansBloc.updateScan(scanModel);
+      //scansBloc.updateScan(productoModel);
     }
 
     Navigator.pop(context);

@@ -1,11 +1,12 @@
-import 'package:barcode/src/bloc/scans_bloc.dart';
-import 'package:barcode/src/models/scan_model.dart';
+import 'package:barcode/src/blocs/productos/productos_bloc.dart';
+import 'package:barcode/src/models/producto_model.dart';
 import 'package:barcode/src/pages/blank_page.dart';
-import 'package:barcode/src/pages/productos_pages.dart';
+import 'package:barcode/src/pages/home/components/productos_list.dart';
 import 'package:flutter/material.dart';
 
 import 'package:barcode_scan/barcode_scan.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:uuid/uuid.dart';
 
 class HomePage extends StatefulWidget {
@@ -14,8 +15,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  final scansBloc = new ScansBloc();
-
   ScanResult scanResult;
   int currentIndex = 1;
 
@@ -27,13 +26,14 @@ class _HomePageState extends State<HomePage> {
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.delete_forever),
-            onPressed: scansBloc.borrarScans,
+            onPressed: () =>
+                BlocProvider.of<ProductosBloc>(context).add(DeleteAll()),
           )
         ],
       ),
       body: _callPage(currentIndex),
       //bottomNavigationBar: _crearBottomNavigationBar(),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.camera),
         onPressed: () => _scan(context),
@@ -54,7 +54,7 @@ class _HomePageState extends State<HomePage> {
         final formatNote = result.formatNote ?? "";
 
         var uuid = Uuid();
-        final scan = ScanModel(
+        final scan = ProductoModel(
             uuid: uuid.v4(),
             valor: rawContent,
             tipo: type,
@@ -90,7 +90,7 @@ class _HomePageState extends State<HomePage> {
       case 0:
         return BlankPage();
       case 1:
-        return ProductosPage();
+        return ProductosList();
       default:
         return BlankPage();
     }
